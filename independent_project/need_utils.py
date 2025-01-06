@@ -341,3 +341,71 @@ def get_subject_data_by_filename(filename, dataset, win_sec):
 
 
 
+
+""" セグメントされた辞書内segmentsの取り出し """
+def get_segments_from_split_data(split_data_dic, subj_num):
+    """
+    入力:
+        split_data_dic <-- preprocessing.split_data_by_subject(data_dic, WINDOW_SEC, SLIDE_SEC)
+        subj_num <-- "1-1"
+    出力:
+        np.array(セグメント数, データポイント数) <-- 被験者の実験ラウンドにおけるセグメントされた行列データ
+    """
+    label = list(split_data_dic[subj_num])  # ラベルの取得
+    segments = np.array(list(split_data_dic[subj_num].values())[0])  # セグメントされたデータの取得
+    print("----------------------------------------")
+    print("セグメントされたデータの取り出しが完了しました。")
+
+    return segments  # セグメントされたデータを返す --> (セグメント数, サンプル数)
+
+# セグメントされたデータの取り出し（例）
+# segments = get_segments_from_split_data(split_data_dic, "1-1")
+# print("セグメントされたデータの形状: ", segments.shape)  # セグメントされたデータの形状を表示 --> (セグメント数, サンプル数)
+
+# import matplotlib.pyplot as plt
+# plt.figure(figsize=(20, 3))
+# plt.plot(segments[0])
+# plt.show()
+""" セグメントされた辞書内segmentsの取り出し """
+
+
+
+
+""" 訓練データとテストデータの作成 """
+def make_train_test_dataset(split_data_dic, test_subj_list):
+    """
+    入力:
+        split_data_dic <-- preprocessing.split_data_by_subject(data_dic, WINDOW_SEC, SLIDE_SEC)
+        test_subj_list <-- ["1-1", "1-3"]   # テスト被験者
+    出力:
+        X_train_segments, y_train_segments, X_test_segments, y_test_segments
+            # セグメントの形状: (実験数, セグメント数, サンプル数)
+            # 訓練データセグメント:  (25, 588, 6656)
+            # 訓練ラベルセグメント:  (25, 588)
+            # テストデータセグメント:  (1, 588, 6656)
+            # テストラベルセグメント:  (1, 588)
+        """
+    X_train_segments = []  # 訓練データ
+    y_train_segments = []  # 訓練ラベル
+    X_test_segments = []  # テストデータ
+    y_test_segments = []  # テストラベル
+    for subj_num in split_data_dic:  # 被験者ごとに処理  (例: "1-1")
+        label = list(split_data_dic[subj_num].keys())[0]  # ラベル  (例: 0)
+        segments = np.array(split_data_dic[subj_num][label])  # セグメントされたデータ  (例: (セグメント数, サンプル数))
+        if subj_num in test_subj_list:  # テストデータの場合  (例: ["1-1", "1-3"])
+            X_test_segments.append(segments)  # テストデータに追加  
+            y_test_segments.append(np.array([label] * len(segments)))  # テストラベルに追加   
+        else:  # 訓練データの場合
+            X_train_segments.append(segments)  # 訓練データに追加
+            y_train_segments.append(np.array([label]*len(segments)))  # 訓練ラベルに追加
+    X_train_segments = np.array(X_train_segments)  # 訓練データ
+    y_train_segments = np.array(y_train_segments)  # 訓練ラベル
+    X_test_segments = np.array(X_test_segments)  # テストデータ
+    y_test_segments = np.array(y_test_segments)  # テストラベル
+    print("セグメントの形状: (実験数, セグメント数, サンプル数)")
+    print("訓練データセグメント: ", X_train_segments.shape)
+    print("訓練ラベルセグメント: ", y_train_segments.shape)
+    print("テストデータセグメント: ", X_test_segments.shape)
+    print("テストラベルセグメント: ", y_test_segments.shape)
+
+    return X_train_segments, y_train_segments, X_test_segments, y_test_segments

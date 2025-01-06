@@ -222,3 +222,23 @@ def generate_phase_space_features(X, delay_time, embedding_dim):
         features = extract_features_from_phase_space(reconstructed)
         all_features.append(features)
     return np.array(all_features)
+
+
+
+""" 被験者ごとにデータをセグメンテーション """
+def split_data_by_subject(data_dic, WINDOW_SEC, SLIDE_SEC):
+    segmented_data_dic = {}  # 分割されたデータを格納する辞書
+    for subj_num in data_dic:  # 被験者ごとに処理
+        data = data_dic[subj_num]  # 被験者のデータ
+        segmented_data = {}  # 分割されたデータを格納する辞書
+        for label in data:  # ラベルごとに処理
+            signal = data[label]  # ラベルに対応するデータ
+            segmented_signal = []  # 分割されたデータを格納するリスト
+            for i in range(0, int(len(signal)-512*WINDOW_SEC+1), int(512*SLIDE_SEC)):  # スライドさせながら分割
+                segmented_signal.append(signal[i:i+512*WINDOW_SEC])  # 分割したデータをリストに追加
+            segmented_data[label] = segmented_signal  # ラベルごとに分割されたデータを格納
+        segmented_data_dic[subj_num] = segmented_data  # 被験者ごとに分割されたデータを格納
+    print("----------------------------------------")
+    print(f"ウィンドウ: {WINDOW_SEC}秒, スライド: {SLIDE_SEC}秒でデータのセグメンテーションが完了しました。")
+
+    return segmented_data_dic
