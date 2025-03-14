@@ -205,8 +205,8 @@ def create_dataset_for_independent(channel=None,  # 生体信号チャンネル
 
     """ クラスに分けた被験者ファイ名の読み込み"""
     # 読み込むJSONファイルのパス
-    # file_path = "../dataset_independent/2class.json"
-    file_path = "/Users/tk/Documents/法政大学/lab/drowsy/drowsy_eeg_eog/dataset_independent/2class.json"
+    file_path = "../2class.json"
+    # file_path = "/Users/tk/Documents/法政大学/lab/drowsy/drowsy_eeg_eog/dataset_independent/2class.json"
     # JSONファイルを開いて読み込む
     with open(file_path, 'r') as f:
         files_two_class = json.load(f)
@@ -214,8 +214,8 @@ def create_dataset_for_independent(channel=None,  # 生体信号チャンネル
 
 
     """ ラベルファイルの読み込み """
-    file_path = "../../DROZY/KSS.txt"
-    file_path = "/Users/tk/Documents/法政大学/lab/drowsy/DROZY/KSS.txt"
+    file_path = "../../dataset/KSS.txt"
+    # file_path = "/Users/tk/Documents/法政大学/lab/drowsy/DROZY/KSS.txt"
     with open(file_path, "r") as f: # ラベルファイルの読み込み
         original_labels = f.read().split("\n")
 
@@ -242,7 +242,8 @@ def create_dataset_for_independent(channel=None,  # 生体信号チャンネル
             """ edfファイルの読み込み """
             # print("ファイル名", filename)  # ../DROZY/psg/2-1.edf
             # edf = pyedflib.EdfReader(os.path.join("..", filename))  # edfファイルの読み込み(filename)
-            file_dir = "/Users/tk/Documents/法政大学/lab/drowsy/DROZY/psg"
+            file_dir = "../../psg"
+            # file_dir = "/Users/tk/Documents/法政大学/lab/drowsy/DROZY/psg"
             edf = pyedflib.EdfReader(os.path.join(file_dir, filename.split("/")[-1]))  # edfファイルの読み込み
 
             """ データの読み込み """

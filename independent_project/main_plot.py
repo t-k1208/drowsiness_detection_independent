@@ -13,8 +13,8 @@ from need_utils import *
 from preprocessing import *
 
 
-filenames = glob.glob("../../DROZY/psg/*.edf")
-with open("../../DROZY/KSS.txt", "r") as f:
+filenames = glob.glob("../../dataset/psg/*.edf")
+with open("../../dataset/KSS.txt", "r") as f:
     original_labels = f.read().split("\n")
 
 subject = 6
