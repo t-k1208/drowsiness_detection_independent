@@ -205,7 +205,7 @@ def create_dataset_for_independent(channel=None,  # 生体信号チャンネル
 
     """ クラスに分けた被験者ファイ名の読み込み"""
     # 読み込むJSONファイルのパス
-    file_path = "../2class.json"
+    file_path = "./2class.json"
     # file_path = "/Users/tk/Documents/法政大学/lab/drowsy/drowsy_eeg_eog/dataset_independent/2class.json"
     # JSONファイルを開いて読み込む
     with open(file_path, 'r') as f:
@@ -214,7 +214,7 @@ def create_dataset_for_independent(channel=None,  # 生体信号チャンネル
 
 
     """ ラベルファイルの読み込み """
-    file_path = "../../dataset/KSS.txt"
+    file_path = "../dataset/KSS.txt"
     # file_path = "/Users/tk/Documents/法政大学/lab/drowsy/DROZY/KSS.txt"
     with open(file_path, "r") as f: # ラベルファイルの読み込み
         original_labels = f.read().split("\n")
@@ -223,16 +223,16 @@ def create_dataset_for_independent(channel=None,  # 生体信号チャンネル
     data_list = []  # クラスごとのデータリスト
     class_dic = {}  # クラス内のデータをまとめる辞書
     for state_index, filenames in tqdm(enumerate(class_filenames)):
-        # class_data_list = []  # クラス内のデータリスト
         for filename in filenames:
             
             """ 被験者No.と、ラベルNo.の取得 """
-            if sys.platform == 'win32':  # 'win32'はWindowsの場合
-                # print("Windows用の処理")
-                nums = filename.split("\\")[-1].split(".")[0].split("-")  # windows
-            elif sys.platform == 'darwin':  # 'darwin'はMacの場合
+            if sys.platform == 'darwin':  # 'darwin'はMacの場合
                 # print("Mac用の処理")
                 nums = filename.split("/")[-1].split(".")[0].split("-")  # mac [被験者番号（1~14）, 実験回数（1~3）]
+            else:
+                nums = filename.split("/")[-1].split(".")[0].split("-")  # windows
+                print(nums)
+
             num_subject, num_experiment = int(nums[0])-1, int(nums[-1])-1  # KSSスコアファイル参照のため被験者No.と実験No.からマイナス1
 
             label = original_labels[num_subject].split(" ")[num_experiment]
@@ -242,7 +242,7 @@ def create_dataset_for_independent(channel=None,  # 生体信号チャンネル
             """ edfファイルの読み込み """
             # print("ファイル名", filename)  # ../DROZY/psg/2-1.edf
             # edf = pyedflib.EdfReader(os.path.join("..", filename))  # edfファイルの読み込み(filename)
-            file_dir = "../../psg"
+            file_dir = "../dataset/psg"
             # file_dir = "/Users/tk/Documents/法政大学/lab/drowsy/DROZY/psg"
             edf = pyedflib.EdfReader(os.path.join(file_dir, filename.split("/")[-1]))  # edfファイルの読み込み
 

@@ -158,7 +158,7 @@ def create_all_dataset(channel=None,  # 生体信号チャンネル
 
     """ クラスに分けた被験者ファイ名の読み込み"""
     # 読み込むJSONファイルのパス
-    file_path = "../2class.json"
+    file_path = "./2class.json"
     # file_path = "/Users/tk/Documents/法政大学/lab/drowsy/drowsy_eeg_eog/dataset_independent/2class.json"
     # JSONファイルを開いて読み込む
     with open(file_path, 'r') as f:
@@ -167,7 +167,7 @@ def create_all_dataset(channel=None,  # 生体信号チャンネル
 
 
     """ ラベルファイルの読み込み """
-    file_path = "../../dataset/KSS.txt"
+    file_path = "../dataset/KSS.txt"
     # file_path = "/Users/tk/Documents/法政大学/lab/drowsy/DROZY/KSS.txt"
     with open(file_path, "r") as f: # ラベルファイルの読み込み
         original_labels = f.read().split("\n")
@@ -258,13 +258,13 @@ def create_all_dataset(channel=None,  # 生体信号チャンネル
 # ファイル名を指定して該当するサンプルを取り出す関数
 def get_samples_by_filename(filename, X):
     # file_path = "/Users/tk/Documents/法政大学/lab/drowsy/drowsy_eeg_eog/dataset_independent/2class.json"
-    file_path = "../2class.json"
+    file_path = "./2class.json"
     # JSONファイルを開いて読み込む
     with open(file_path, 'r') as f:
         files_two_class = json.load(f)
     class_filenames = [files_two_class[0], files_two_class[1]]
     # ファイル名だけを取り出してを1次元リストに変換
-    class_filenames = [item.replace('../../dataset/psg/', '') for sublist in class_filenames for item in sublist]
+    class_filenames = [item.replace('../dataset/psg/', '') for sublist in class_filenames for item in sublist]
     if filename not in class_filenames:
         raise ValueError(f"File name {filename} not found in the list.")
     
@@ -279,13 +279,13 @@ def get_samples_by_filename(filename, X):
 # ファイル名を指定して該当するサンプルを取り出す関数
 def get_lyap_results_by_filename(filename, lyap_results):
     # file_path = "/Users/tk/Documents/法政大学/lab/drowsy/drowsy_eeg_eog/dataset_independent/2class.json"
-    file_path = "../2class.json"
+    file_path = "./2class.json"
     # JSONファイルを開いて読み込む
     with open(file_path, 'r') as f:
         files_two_class = json.load(f)
     class_filenames = [files_two_class[0], files_two_class[1]]
     # ファイル名だけを取り出してを1次元リストに変換
-    class_filenames = [item.replace('../../dataset/psg/', '') for sublist in class_filenames for item in sublist]
+    class_filenames = [item.replace('../dataset/psg/', '') for sublist in class_filenames for item in sublist]
     # 取り除きたい値のリスト (テスト被験者のファイル名)
     values_to_remove = ["2-1.edf", "2-2.edf"]
     # 指定の値を取り除く (学習被験者のファイル名のみにする)
@@ -311,13 +311,13 @@ def get_lyap_results_by_filename(filename, lyap_results):
 
 # ファイル名を指定して該当するサンプルを取り出す関数
 def get_subject_data_by_filename(filename, dataset, win_sec):
-    file_path = "../2class.json"
+    file_path = "./2class.json"
     # JSONファイルを開いて読み込む
     with open(file_path, 'r') as f:
         files_two_class = json.load(f)
     class_filenames = [files_two_class[0], files_two_class[1]]
     # ファイル名だけを取り出してを1次元リストに変換
-    class_filenames = [item.replace('../../dataset/psg/', '') for sublist in class_filenames for item in sublist]
+    class_filenames = [item.replace('../dataset/psg/', '') for sublist in class_filenames for item in sublist]
     # 取り除きたい値のリスト (テスト被験者のファイル名)
     values_to_remove = ["2-1.edf", "2-2.edf"]
     # 指定の値を取り除く (学習被験者のファイル名のみにする)
