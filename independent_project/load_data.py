@@ -276,6 +276,10 @@ def create_dataset_for_independent(channel=None,  # 生体信号チャンネル
                 data = replace_outliers_with_robust_statistics(data)
                 # print("外れ値を除去しました")
 
+            if downsampling:
+                data = downsample(data, fs, fr)
+                # print("ダウンサンプリングしました")
+
             # class_data_list.append(data)  # クラス内のデータリスト
             sub_trial_num = filename.split("/")[-1].split(".")[0] 
             if sub_trial_num not in class_dic:  # キーが存在しない場合

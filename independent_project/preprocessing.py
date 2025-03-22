@@ -17,25 +17,11 @@ from scipy.stats import skew, kurtosis
 
 # ダウンサンプリングの関数
 def downsample(data, fs, new_fs):
-    """
-    各セグメントにダウンサンプリングを適用する
-
-    Parameters:
-    data (array-like): 入力データ (セグメント数, データ点)
-    fs (float): 元のサンプリングレート (Hz)
-    new_fs (float): 新しいサンプリングレート (Hz)
-
-    Returns:
-    array-like: ダウンサンプリング後のデータ (セグメント数, 新しいデータ点)
-    """
-    num_segments, num_data_points = data.shape
-    new_data_length = int(num_data_points * new_fs / fs)
-    downsampled_data = np.zeros((num_segments, new_data_length))
-
-    for i in range(num_segments):
-        downsampled_data[i] = signal.resample(data[i], new_data_length)
-
-    return downsampled_data
+    # ダウンサンプリング後のデータ数を計算
+    new_data_length = int(len(data) * new_fs / fs)
+    # ダウンサンプリング
+    new_data = signal.resample(data, new_data_length)
+    return new_data
 
 
 def apply_bandpass_filter(data, sampling_rate, low_cut, high_cut, order=5):
@@ -248,7 +234,7 @@ def generate_phase_space_features(X, delay_time, embedding_dim):
 
 
 """ 被験者ごとにデータをセグメンテーション """
-def split_data_by_subject(data_dic, WINDOW_SEC, SLIDE_SEC):
+def split_data_by_subject(data_dic, WINDOW_SEC, SLIDE_SEC, fs=512):
     segmented_data_dic = {}  # 分割されたデータを格納する辞書
     for subj_num in data_dic:  # 被験者ごとに処理
         data = data_dic[subj_num]  # 被験者のデータ
@@ -256,8 +242,8 @@ def split_data_by_subject(data_dic, WINDOW_SEC, SLIDE_SEC):
         for label in data:  # ラベルごとに処理
             signal = data[label]  # ラベルに対応するデータ
             segmented_signal = []  # 分割されたデータを格納するリスト
-            for i in range(0, int(len(signal)-512*WINDOW_SEC+1), int(512*SLIDE_SEC)):  # スライドさせながら分割
-                segmented_signal.append(signal[i:i+512*WINDOW_SEC])  # 分割したデータをリストに追加
+            for i in range(0, int(len(signal)-fs*WINDOW_SEC+1), int(fs*SLIDE_SEC)):  # スライドさせながら分割
+                segmented_signal.append(signal[i:i+fs*WINDOW_SEC])  # 分割したデータをリストに追加
             segmented_data[label] = segmented_signal  # ラベルごとに分割されたデータを格納
         segmented_data_dic[subj_num] = segmented_data  # 被験者ごとに分割されたデータを格納
     print("----------------------------------------")
