@@ -15,6 +15,28 @@ import seaborn as sns
 from scipy.stats import skew, kurtosis
 
 
+# ダウンサンプリングの関数
+def downsample(data, fs, new_fs):
+    """
+    各セグメントにダウンサンプリングを適用する
+
+    Parameters:
+    data (array-like): 入力データ (セグメント数, データ点)
+    fs (float): 元のサンプリングレート (Hz)
+    new_fs (float): 新しいサンプリングレート (Hz)
+
+    Returns:
+    array-like: ダウンサンプリング後のデータ (セグメント数, 新しいデータ点)
+    """
+    num_segments, num_data_points = data.shape
+    new_data_length = int(num_data_points * new_fs / fs)
+    downsampled_data = np.zeros((num_segments, new_data_length))
+
+    for i in range(num_segments):
+        downsampled_data[i] = signal.resample(data[i], new_data_length)
+
+    return downsampled_data
+
 
 def apply_bandpass_filter(data, sampling_rate, low_cut, high_cut, order=5):
     """
